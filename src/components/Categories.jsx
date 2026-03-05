@@ -1,28 +1,54 @@
-const Categories = () => (
-  <section className="categories">
-    <div className="section-header">
-      <h2>Popular Categories</h2>
-      <a href="#">View All →</a>
-    </div>
-    <div className="category-grid">
-      <div className="card">
-        ⚙️ Engineering
-        <span>450+ positions</span>
+import { useState, useEffect } from 'react'
+import { Link } from 'react-router-dom'
+import axios from 'axios'
+
+const categoryIcons = {
+  'Engineering': '⚙️',
+  'Design': '🎨',
+  'Marketing': '📈',
+  'Finance': '💰',
+};
+
+const Categories = () => {
+  const [categories, setCategories] = useState([]);
+  const [loading, setLoading] = useState(true);
+
+  useEffect(() => {
+    axios.get('/api/jobs/categories')
+      .then(res => setCategories(res.data))
+      .catch(() => setCategories([]))
+      .finally(() => setLoading(false));
+  }, []);
+
+  if (loading) {
+    return (
+      <section className="categories">
+        <div className="section-header">
+          <h2>Popular Categories</h2>
+        </div>
+        <div className="loading-state">
+          <div className="spinner"></div>
+        </div>
+      </section>
+    );
+  }
+
+  return (
+    <section className="categories">
+      <div className="section-header">
+        <h2>Popular Categories</h2>
+        <Link to="/jobs">View All →</Link>
       </div>
-      <div className="card">
-        🎨 Design
-        <span>280+ positions</span>
+      <div className="category-grid">
+        {categories.map((cat) => (
+          <Link to={`/jobs?category=${cat.name}`} key={cat.name} className="card">
+            {categoryIcons[cat.name] || '📁'} {cat.name}
+            <span>{cat.count}+ positions</span>
+          </Link>
+        ))}
       </div>
-      <div className="card">
-        📈 Marketing
-        <span>310+ positions</span>
-      </div>
-      <div className="card">
-        💰 Finance
-        <span>190+ positions</span>
-      </div>
-    </div>
-  </section>
-)
+    </section>
+  );
+}
 
 export default Categories
