@@ -1,28 +1,47 @@
-const Categories = () => (
-  <section className="categories">
-    <div className="section-header">
-      <h2>Popular Categories</h2>
-      <a href="#">View All →</a>
-    </div>
-    <div className="category-grid">
-      <div className="card">
-        ⚙️ Engineering
-        <span>450+ positions</span>
+import { useState, useEffect } from 'react'
+import { Link } from 'react-router-dom'
+import api from '../utils/api'
+
+const Categories = () => {
+  const [categories, setCategories] = useState([])
+
+  const fallbackCategories = [
+    { name: 'Engineering', icon: '⚙️', count: 0 },
+    { name: 'Design', icon: '🎨', count: 0 },
+    { name: 'Marketing', icon: '📈', count: 0 },
+    { name: 'Finance', icon: '💰', count: 0 }
+  ]
+
+  useEffect(() => {
+    const fetchCategories = async () => {
+      try {
+        const res = await api.get('/jobs/categories')
+        setCategories(res.data.length > 0 ? res.data : fallbackCategories)
+      } catch {
+        setCategories(fallbackCategories)
+      }
+    }
+    fetchCategories()
+  }, [])
+
+  const display = categories.length > 0 ? categories : fallbackCategories
+
+  return (
+    <section className="categories">
+      <div className="section-header">
+        <h2>Popular Categories</h2>
+        <Link to="/jobs">View All →</Link>
       </div>
-      <div className="card">
-        🎨 Design
-        <span>280+ positions</span>
+      <div className="category-grid">
+        {display.map(cat => (
+          <Link to={`/jobs?category=${cat.name}`} key={cat.name} className="card">
+            {cat.icon} {cat.name}
+            <span>{cat.count}+ positions</span>
+          </Link>
+        ))}
       </div>
-      <div className="card">
-        📈 Marketing
-        <span>310+ positions</span>
-      </div>
-      <div className="card">
-        💰 Finance
-        <span>190+ positions</span>
-      </div>
-    </div>
-  </section>
-)
+    </section>
+  )
+}
 
 export default Categories
