@@ -15,10 +15,14 @@ export default function Login() {
         setError('');
         setLoading(true);
         try {
-            await login(email, password);
+            await login(email.toLowerCase().trim(), password);
             navigate('/');
         } catch (err) {
-            setError(err.response?.data?.message || 'Login failed');
+            if (!err.response) {
+                setError('Cannot connect to server. Please try again later.');
+            } else {
+                setError(err.response.data?.message || 'Login failed. Please check your credentials.');
+            }
         } finally {
             setLoading(false);
         }
@@ -28,7 +32,11 @@ export default function Login() {
         <div className="auth-page">
             <div className="auth-container">
                 <div className="auth-header">
-                    <div className="auth-icon">🔐</div>
+                    <div className="auth-icon">
+                        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
+                            <path d="M15 3h4a2 2 0 0 1 2 2v14a2 2 0 0 1-2 2h-4M10 17l5-5-5-5M15 12H3"/>
+                        </svg>
+                    </div>
                     <h1>Welcome Back</h1>
                     <p>Sign in to your JobNest account</p>
                 </div>

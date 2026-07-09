@@ -10,7 +10,8 @@ const router = Router();
 // POST /api/auth/register
 router.post('/register', async (req, res) => {
     try {
-        const { name, email, password, role } = req.body;
+        const { name, password, role } = req.body;
+        const email = req.body.email?.toLowerCase().trim();
 
         if (!name || !email || !password) {
             return res.status(400).json({ message: 'Please provide name, email, and password' });
@@ -53,7 +54,8 @@ router.post('/register', async (req, res) => {
 // POST /api/auth/login
 router.post('/login', async (req, res) => {
     try {
-        const { email, password } = req.body;
+        const email = req.body.email?.toLowerCase().trim();
+        const { password } = req.body;
 
         if (!email || !password) {
             return res.status(400).json({ message: 'Please provide email and password' });

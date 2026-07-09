@@ -39,7 +39,7 @@ export default function JobDetail() {
             await axios.post('/api/applications', { jobId: id, coverLetter });
             setApplied(true);
             setShowApply(false);
-            setMessage('🎉 Application submitted successfully!');
+            setMessage('Application submitted successfully!');
         } catch (err) {
             setMessage(err.response?.data?.message || 'Application failed');
         } finally {
@@ -73,14 +73,14 @@ export default function JobDetail() {
                 <div className="job-detail-title">
                     <h1>{job.title}</h1>
                     <div className="job-detail-meta">
-                        <span className="company-name">🏢 {job.company}</span>
-                        <span className="location-name">📍 {job.location}</span>
+                        <span className="company-name">{job.company}</span>
+                        <span className="location-name">{job.location}</span>
                         <span className={`type-badge ${job.type.toLowerCase().replace('-', '')}`}>
                             {job.type}
                         </span>
                     </div>
                     <div className="job-detail-salary">
-                        💰 {formatSalary(job.salaryMin, job.salaryMax)}
+                        {formatSalary(job.salaryMin, job.salaryMax)}
                     </div>
                     <div className="job-detail-date">
                         Posted {new Date(job.createdAt).toLocaleDateString('en-US', {
@@ -101,7 +101,7 @@ export default function JobDetail() {
                     <h2>About This Role</h2>
                     <p>{job.description}</p>
                     <div className="job-detail-tags">
-                        <span className="detail-tag">📂 {job.category}</span>
+                        <span className="detail-tag">{job.category}</span>
                     </div>
                 </div>
 
@@ -119,7 +119,7 @@ export default function JobDetail() {
                         </div>
                     ) : applied ? (
                         <div className="apply-box applied">
-                            <h3>✅ Application Sent</h3>
+                            <h3>Application Submitted</h3>
                             <p>Your application has been submitted. Good luck!</p>
                             <Link to="/dashboard" className="primary-btn">View My Applications</Link>
                         </div>

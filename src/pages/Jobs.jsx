@@ -76,7 +76,7 @@ export default function Jobs() {
             <div className="jobs-content">
                 <aside className="jobs-sidebar">
                     <form onSubmit={handleSearch}>
-                        <h3>🔍 Search & Filter</h3>
+                        <h3>Search & Filter</h3>
                         <div className="filter-group">
                             <label>Keywords</label>
                             <input
@@ -126,7 +126,6 @@ export default function Jobs() {
                         </div>
                     ) : jobs.length === 0 ? (
                         <div className="empty-state">
-                            <span className="empty-icon">🔍</span>
                             <h3>No jobs found</h3>
                             <p>Try adjusting your search or filters</p>
                             <button onClick={clearFilters} className="primary-btn">Clear Filters</button>

@@ -1,14 +1,16 @@
-import { Link } from 'react-router-dom'
+import { Link, useLocation } from 'react-router-dom'
 import { useAuth } from '../context/AuthContext'
+import logo from '../assets/logo.png'
 
 const Navbar = () => {
   const { user, logout } = useAuth();
+  const location = useLocation();
+  const isHome = location.pathname === '/';
 
   return (
-    <header className="navbar">
+    <header className={`navbar ${isHome ? 'navbar-home' : 'navbar-subpage'}`}>
       <Link to="/" className="logo">
-        <span className="logo-icon">💼</span>
-        <span>JobNest</span>
+        <img src={logo} alt="JobNest Logo" className="logo-img" />
       </Link>
       <nav>
         <Link to="/jobs">Jobs</Link>
@@ -32,7 +34,7 @@ const Navbar = () => {
           </>
         )}
       </div>
-      <div className="mobile-toggle">
+      <div className="mobile-toggle" id="mobile-menu-toggle">
         <span></span>
         <span></span>
         <span></span>

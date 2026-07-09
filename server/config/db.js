@@ -2,8 +2,11 @@ import fs from 'fs';
 import path from 'path';
 import { fileURLToPath } from 'url';
 
+// __dirname is the server/config/ directory
 const __dirname = path.dirname(fileURLToPath(import.meta.url));
-const DATA_DIR = path.join(__dirname, '..', '..', 'data');
+
+// data/ always lives at the project root (one level above server/)
+const DATA_DIR = path.resolve(__dirname, '..', '..', 'data');
 
 // Ensure data directory exists
 if (!fs.existsSync(DATA_DIR)) {
@@ -29,13 +32,24 @@ class JsonDB {
   }
 
   _read() {
-    const raw = fs.readFileSync(this.filePath, 'utf-8');
-    return JSON.parse(raw);
+    try {
+      const raw = fs.readFileSync(this.filePath, 'utf-8');
+      return JSON.parse(raw);
+    } catch (err) {
+      console.error('DB read error:', err.message);
+      throw new Error('Database read failed. Please contact support.');
+    }
   }
 
   _write(data) {
-    fs.writeFileSync(this.filePath, JSON.stringify(data, null, 2));
+    try {
+      fs.writeFileSync(this.filePath, JSON.stringify(data, null, 2));
+    } catch (err) {
+      console.error('DB write error:', err.message);
+      throw new Error('Database write failed. The server may have a permissions issue.');
+    }
   }
+
 
   // --- Users ---
   getUsers() {

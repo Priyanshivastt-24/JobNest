@@ -6,6 +6,9 @@
   "scripts": {
     "dev": "vite",
     "build": "vite build",
+    "build:full": "vite build && cd server && npm install --omit=dev",
+    "start:prod": "cd server && npm run start",
+    "start:prod:win": "cd server && npm run start:win",
     "lint": "eslint .",
     "preview": "vite preview"
   },

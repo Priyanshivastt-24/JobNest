@@ -21,7 +21,6 @@ export default function PostJob() {
             <div className="auth-page">
                 <div className="auth-container">
                     <div className="auth-header">
-                        <div className="auth-icon">🔒</div>
                         <h1>Employer Access Only</h1>
                         <p>You need an employer account to post jobs</p>
                     </div>
@@ -52,7 +51,6 @@ export default function PostJob() {
         <div className="post-job-page">
             <div className="post-job-container">
                 <div className="auth-header">
-                    <div className="auth-icon">📝</div>
                     <h1>Post a New Job</h1>
                     <p>Find the perfect candidate for your team</p>
                 </div>

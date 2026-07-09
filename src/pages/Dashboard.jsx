@@ -85,9 +85,9 @@ export default function Dashboard() {
         <div className="dashboard-page">
             <div className="dashboard-header">
                 <div>
-                    <h1>Welcome, {user.name}! 👋</h1>
+                    <h1>Welcome, {user.name}</h1>
                     <p className="dashboard-role">
-                        {user.role === 'seeker' ? '🔍 Job Seeker Dashboard' : '🏢 Employer Dashboard'}
+                        {user.role === 'seeker' ? 'Job Seeker Dashboard' : 'Employer Dashboard'}
                     </p>
                 </div>
                 {user.role === 'employer' && (
@@ -100,7 +100,11 @@ export default function Dashboard() {
                     <h2>My Applications ({applications.length})</h2>
                     {applications.length === 0 ? (
                         <div className="empty-state">
-                            <span className="empty-icon">📋</span>
+                            <div className="empty-icon">
+                                <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1.5" strokeLinecap="round" strokeLinejoin="round" style={{width:'48px',height:'48px',color:'#D1D5DB'}}>
+                                    <path d="M9 5H7a2 2 0 0 0-2 2v12a2 2 0 0 0 2 2h10a2 2 0 0 0 2-2V7a2 2 0 0 0-2-2h-2M9 5a2 2 0 0 0 2 2h2a2 2 0 0 0 2-2M9 5a2 2 0 0 1 2-2h2a2 2 0 0 1 2 2"/>
+                                </svg>
+                            </div>
                             <h3>No applications yet</h3>
                             <p>Start exploring jobs and apply to get started</p>
                             <Link to="/jobs" className="primary-btn">Browse Jobs</Link>
@@ -133,7 +137,11 @@ export default function Dashboard() {
                     <h2>My Posted Jobs ({myJobs.length})</h2>
                     {myJobs.length === 0 ? (
                         <div className="empty-state">
-                            <span className="empty-icon">📝</span>
+                            <div className="empty-icon">
+                                <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1.5" strokeLinecap="round" strokeLinejoin="round" style={{width:'48px',height:'48px',color:'#D1D5DB'}}>
+                                    <path d="M11 5H6a2 2 0 0 0-2 2v11a2 2 0 0 0 2 2h11a2 2 0 0 0 2-2v-5m-1.414-9.414a2 2 0 1 1 2.828 2.828L11.828 15H9v-2.828l8.586-8.586z"/>
+                                </svg>
+                            </div>
                             <h3>No jobs posted yet</h3>
                             <p>Post your first job to start receiving applications</p>
                             <Link to="/post-job" className="primary-btn">Post a Job</Link>
