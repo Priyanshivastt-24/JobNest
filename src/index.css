@@ -37,6 +37,27 @@ html {
   scroll-behavior: auto;
 }
 
+/* ============================================================
+   SCROLL SNAPPING (PPT Style Slide Transition)
+   ============================================================ */
+html.snap-active {
+  scroll-snap-type: y mandatory;
+}
+
+html.snap-active .snap-slide {
+  scroll-snap-align: start;
+  scroll-snap-stop: always;
+  min-height: 100vh;
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+}
+
+html.snap-active footer {
+  scroll-snap-align: end;
+  scroll-snap-stop: always;
+}
+
 body {
   font-family: 'Inter', -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif;
   background: var(--bg);
