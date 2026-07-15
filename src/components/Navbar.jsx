@@ -23,12 +23,20 @@ const Navbar = () => {
 
   const [categories, setCategories] = useState([]);
   const [dropdownOpen, setDropdownOpen] = useState(false);
+  const [scrolled, setScrolled] = useState(false);
   const dropdownRef = useRef(null);
 
   useEffect(() => {
     axios.get('/api/jobs/categories')
       .then(res => setCategories(res.data))
       .catch(() => setCategories([]));
+  }, []);
+
+  // Solid background on scroll
+  useEffect(() => {
+    const handleScroll = () => setScrolled(window.scrollY > 10);
+    window.addEventListener('scroll', handleScroll, { passive: true });
+    return () => window.removeEventListener('scroll', handleScroll);
   }, []);
 
   // Close dropdown when clicking outside
@@ -53,7 +61,7 @@ const Navbar = () => {
   };
 
   return (
-    <header className={`navbar ${isHome ? 'navbar-home' : 'navbar-subpage'}`}>
+    <header className={`navbar ${isHome ? `navbar-home${scrolled ? ' navbar-home-scrolled' : ''}` : 'navbar-subpage'}`}>
       <Link to="/" className="logo">
         <img src={logo} alt="JobNest Logo" className="logo-img" />
       </Link>

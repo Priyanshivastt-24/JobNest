@@ -72,7 +72,7 @@ button {
   left: 0;
   right: 0;
   z-index: 1000;
-  height: 80px;
+  height: 64px;
   width: 100%;
   transition: all 0.25s ease;
 }
@@ -155,6 +155,15 @@ button {
 /* Home Navbar Specifics (Invisible Transparent Overlay) */
 .navbar-home {
   background: transparent;
+  border-bottom: 1px solid rgba(255, 255, 255, 0.04);
+  transition: background 0.3s ease, border-color 0.3s ease, box-shadow 0.3s ease;
+}
+
+/* Scrolled state: solid dark background */
+.navbar-home-scrolled {
+  background: #0A111F;
+  border-bottom: 1px solid rgba(255, 255, 255, 0.06);
+  box-shadow: 0 2px 20px rgba(0, 0, 0, 0.4);
 }
 
 .navbar-home .logo {
