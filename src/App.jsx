@@ -1,4 +1,5 @@
-import { Routes, Route } from 'react-router-dom'
+import { useEffect } from 'react'
+import { Routes, Route, useLocation } from 'react-router-dom'
 import Navbar from './components/Navbar'
 import Footer from './components/Footer'
 import Home from './pages/Home'
@@ -11,6 +12,23 @@ import Dashboard from './pages/Dashboard'
 import './App.css'
 
 function App() {
+  const { pathname, hash } = useLocation();
+
+  useEffect(() => {
+    if (hash) {
+      const id = hash.replace('#', '');
+      const element = document.getElementById(id);
+      if (element) {
+        const timer = setTimeout(() => {
+          element.scrollIntoView({ behavior: 'smooth' });
+        }, 150);
+        return () => clearTimeout(timer);
+      }
+    } else {
+      window.scrollTo(0, 0);
+    }
+  }, [pathname, hash]);
+
   return (
     <>
       <Navbar />

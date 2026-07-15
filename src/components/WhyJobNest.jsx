@@ -26,7 +26,7 @@ const features = [
 ];
 
 const WhyJobNest = () => (
-  <section className="why">
+  <section id="about" className="why">
     <div className="why-inner">
       <div className="why-left">
         <span className="section-label">WHY CHOOSE US</span>

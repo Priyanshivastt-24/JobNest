@@ -44,7 +44,7 @@ const Categories = () => {
   }
 
   return (
-    <section className="categories">
+    <section id="categories" className="categories">
       <div className="section-header-centered">
         <h2>Popular Category</h2>
         <p className="subtitle">Explore active jobs across high-demand business domains</p>
