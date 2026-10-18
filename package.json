@@ -6,9 +6,10 @@
   "scripts": {
     "dev": "vite",
     "build": "vite build",
-    "build:full": "vite build && cd server && npm install --omit=dev",
-    "start:prod": "cd server && npm run start",
-    "start:prod:win": "cd server && npm run start:win",
+    "backend:run": "cd backend && mvn spring-boot:run",
+    "backend:build": "cd backend && mvn clean package -DskipTests",
+    "backend:jar": "java -jar backend/target/jobnest-backend-1.0.0.jar",
+    "backend:h2": "java -jar backend/target/jobnest-backend-1.0.0.jar --spring.profiles.active=h2",
     "lint": "eslint .",
     "preview": "vite preview"
   },

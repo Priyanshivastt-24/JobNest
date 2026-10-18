@@ -1,0 +1,94 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<head th:replace="~{fragments/head :: head('Post a Job')}"></head>
+<body>
+
+    <nav th:replace="~{fragments/navbar :: navbar}"></nav>
+
+    <main class="main-content">
+        <section class="section" style="padding-top: 40px;">
+            <div class="container" style="max-width: 800px;">
+                <div style="margin-bottom: 28px;">
+                    <h1 style="font-size: 2.2rem; font-weight: 800; color: var(--primary); letter-spacing: -0.5px;">Create a Job Opening</h1>
+                    <p style="color: var(--text-secondary); margin-top: 4px;">Reach qualified software engineers, designers, and tech leaders on JobNest</p>
+                </div>
+
+                <div class="job-body-card">
+                    <form th:action="@{/post-job}" method="post">
+                        <!-- Job Title -->
+                        <div class="form-group">
+                            <label class="form-label">Job Title *</label>
+                            <input type="text" name="title" class="form-control" placeholder="e.g. Senior Full-Stack Engineer" required>
+                        </div>
+
+                        <!-- Company & Location Row -->
+                        <div class="form-row-grid">
+                            <div class="form-group">
+                                <label class="form-label">Company Name *</label>
+                                <input type="text" name="company" class="form-control" placeholder="e.g. Acme Tech Labs" required>
+                            </div>
+                            <div class="form-group">
+                                <label class="form-label">Location *</label>
+                                <input type="text" name="location" class="form-control" placeholder="e.g. San Francisco, CA or Remote" required>
+                            </div>
+                        </div>
+
+                        <!-- Category & Job Type Row -->
+                        <div class="form-row-grid">
+                            <div class="form-group">
+                                <label class="form-label">Category *</label>
+                                <select name="category" class="form-control" required>
+                                    <option value="Engineering">Engineering</option>
+                                    <option value="Design">Design</option>
+                                    <option value="Product">Product</option>
+                                    <option value="Marketing">Marketing</option>
+                                    <option value="Finance">Finance</option>
+                                    <option value="Human Resources">Human Resources</option>
+                                </select>
+                            </div>
+                            <div class="form-group">
+                                <label class="form-label">Employment Type *</label>
+                                <select name="type" class="form-control" required>
+                                    <option value="Full-time">Full-time</option>
+                                    <option value="Remote">Remote</option>
+                                    <option value="Part-time">Part-time</option>
+                                    <option value="Contract">Contract</option>
+                                    <option value="Internship">Internship</option>
+                                </select>
+                            </div>
+                        </div>
+
+                        <!-- Salary Range Row -->
+                        <div class="form-row-grid">
+                            <div class="form-group">
+                                <label class="form-label">Minimum Salary ($ USD / year)</label>
+                                <input type="number" name="salaryMin" class="form-control" placeholder="e.g. 140000" step="5000">
+                            </div>
+                            <div class="form-group">
+                                <label class="form-label">Maximum Salary ($ USD / year)</label>
+                                <input type="number" name="salaryMax" class="form-control" placeholder="e.g. 190000" step="5000">
+                            </div>
+                        </div>
+
+                        <!-- Description -->
+                        <div class="form-group">
+                            <label class="form-label">Job Description & Responsibilities *</label>
+                            <textarea name="description" rows="7" class="form-control" placeholder="Describe the mission, key challenges, day-to-day responsibilities, tech stack, and ideal candidate profile..." required></textarea>
+                        </div>
+
+                        <div class="form-actions-row">
+                            <a th:href="@{/jobs}" class="btn btn-outline" style="padding: 12px 24px;">Cancel</a>
+                            <button type="submit" class="btn btn-primary" style="padding: 12px 30px; font-size: 1rem;">
+                                <i class="fa-solid fa-paper-plane"></i> Publish Opening
+                            </button>
+                        </div>
+                    </form>
+                </div>
+            </div>
+        </section>
+    </main>
+
+    <footer th:replace="~{fragments/footer :: footer}"></footer>
+
+</body>
+</html>

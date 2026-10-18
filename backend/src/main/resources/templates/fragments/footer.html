@@ -1,0 +1,46 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<footer th:fragment="footer" class="footer">
+    <div class="container">
+        <div class="footer-grid">
+            <div class="footer-brand">
+                <div style="display: flex; align-items: center; gap: 10px; margin-bottom: 14px;">
+                    <div class="nav-logo-icon" style="width: 32px; height: 32px; font-size: 1rem;">JN</div>
+                    <h2 style="margin: 0; font-size: 1.35rem;">Job<span style="color: var(--secondary);">Nest</span></h2>
+                </div>
+                <p>The modern platform connecting ambitious professionals with world-class engineering, design, and product opportunities.</p>
+                <div style="margin-top: 18px; display: flex; gap: 14px; font-size: 1.1rem;">
+                    <a href="#" style="color: #94A3B8;"><i class="fa-brands fa-github"></i></a>
+                    <a href="#" style="color: #94A3B8;"><i class="fa-brands fa-linkedin"></i></a>
+                    <a href="#" style="color: #94A3B8;"><i class="fa-brands fa-x-twitter"></i></a>
+                </div>
+            </div>
+
+            <div class="footer-col">
+                <h4>Quick Links</h4>
+                <ul class="footer-links">
+                    <li><a th:href="@{/jobs}">Browse Jobs</a></li>
+                    <li><a th:href="@{/post-job}">Post a Job</a></li>
+                    <li><a th:href="@{/dashboard}">Candidate Dashboard</a></li>
+                    <li><a th:href="@{/login}">Employer Login</a></li>
+                </ul>
+            </div>
+
+            <div class="footer-col">
+                <h4>Categories</h4>
+                <ul class="footer-links">
+                    <li><a th:href="@{/jobs(category='Engineering')}">Software Engineering</a></li>
+                    <li><a th:href="@{/jobs(category='Design')}">Product Design (UX/UI)</a></li>
+                    <li><a th:href="@{/jobs(category='Product')}">Product Management</a></li>
+                    <li><a th:href="@{/jobs(category='Marketing')}">Growth Marketing</a></li>
+                    <li><a th:href="@{/jobs(category='Finance')}">Finance & Strategy</a></li>
+            </div>
+        </div>
+
+        <div class="footer-bottom">
+            <p>&copy; 2026 JobNest, Inc. All rights reserved.</p>
+            <p style="color: #64748B;">Connecting talent with top opportunities</p>
+        </div>
+    </div>
+</footer>
+</html>

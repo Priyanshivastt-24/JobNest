@@ -1,0 +1,176 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<head th:replace="~{fragments/head :: head(${job.title} + ' at ' + ${job.company})}"></head>
+<body>
+
+    <nav th:replace="~{fragments/navbar :: navbar}"></nav>
+
+    <main class="main-content">
+        <!-- Job Header Banner -->
+        <div class="job-detail-header">
+            <div class="container">
+                <a th:href="@{/jobs}" style="display: inline-flex; align-items: center; gap: 8px; font-size: 0.9rem; color: var(--text-secondary); margin-bottom: 20px;">
+                    <i class="fa-solid fa-arrow-left"></i> Back to all jobs
+                </a>
+
+                <div class="job-detail-top-bar">
+                    <div class="job-detail-identity">
+                        <div class="company-logo" style="width: 64px; height: 64px; font-size: 1.6rem;" th:text="${#strings.substring(job.company, 0, 1)}">C</div>
+                        <div>
+                            <h1 class="job-detail-title" th:text="${job.title}">Senior Software Architect</h1>
+                            <div class="job-detail-meta">
+                                <span style="font-weight: 600; color: var(--text-primary);" th:text="${job.company}">Acme Corp</span>
+                                <span><i class="fa-solid fa-location-dot" style="color: var(--secondary);"></i> <span th:text="${job.location}">San Francisco, CA</span></span>
+                                <span class="tag tag-type" th:text="${job.type}">Full-time</span>
+                                <span class="tag tag-category" th:text="${job.category}">Engineering</span>
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- Application CTA Action -->
+                    <div class="job-detail-cta">
+                        <!-- Case 1: Job Seeker & already applied -->
+                        <div th:if="${session.currentUser != null && session.currentUser.role == 'seeker' && hasApplied}"
+                             style="display: flex; align-items: center; gap: 8px; padding: 10px 18px; background: #D1FAE5; color: #065F46; border-radius: var(--radius-md); font-weight: 600;">
+                            <i class="fa-solid fa-circle-check"></i> Applied
+                        </div>
+
+                        <!-- Case 2: Job Seeker & not applied yet -->
+                        <button th:if="${session.currentUser != null && session.currentUser.role == 'seeker' && !hasApplied}"
+                                id="openApplyBtn" class="btn btn-primary" style="padding: 12px 26px; font-size: 1rem;">
+                            <i class="fa-solid fa-paper-plane"></i> Apply for this Job
+                        </button>
+
+                        <!-- Case 3: Employer & is owner -->
+                        <div th:if="${isOwner}" style="display: flex; align-items: center; gap: 12px;">
+                            <span class="tag tag-category" style="padding: 8px 14px; font-size: 0.88rem;">
+                                <i class="fa-solid fa-user-tie"></i> Posted by you
+                            </span>
+                            <form th:action="@{/jobs/{id}/delete(id=${job.id})}" method="post" th:onsubmit="'return confirmDelete(\'' + ${job.title} + '\');'">
+                                <button type="submit" class="btn btn-danger" style="padding: 10px 16px;">
+                                    <i class="fa-solid fa-trash"></i> Delete
+                                </button>
+                            </form>
+                        </div>
+
+                        <!-- Case 4: Not logged in -->
+                        <a th:if="${session.currentUser == null}" th:href="@{/login}" class="btn btn-primary" style="padding: 12px 24px;">
+                            Sign in to Apply
+                        </a>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- Job Body & Sidebar Layout -->
+        <section class="section" style="padding-top: 36px;">
+            <div class="container">
+                <div class="job-detail-layout">
+                    <!-- Left: Description -->
+                    <div class="job-body-card">
+                        <h2>Role Overview</h2>
+                        <p th:text="${job.description}">
+                            Detailed job description.
+                        </p>
+
+                        <h3>Key Responsibilities & Expectations</h3>
+                        <p>
+                            • Lead architectural planning, design, and deployment of scalable, high-throughput systems.
+                            • Partner with cross-functional product, UX, and data teams to deliver delightful user experiences.
+                            • Mentor and empower engineering talent through code reviews, technical designs, and pair programming.
+                            • Maintain high standards of code hygiene, automated testing, and zero-downtime releases.
+                        </p>
+
+                        <h3>Preferred Qualifications</h3>
+                        <p>
+                            • Proven track record shipping production systems in modern cloud stacks.
+                            • Strong grasp of microservices, distributed data architecture, and relational databases.
+                            • Exceptional communication and analytical problem-solving skills.
+                        </p>
+                    </div>
+
+                    <!-- Right: Quick Specs Sidebar -->
+                    <div>
+                        <div class="sidebar-card">
+                            <h3>Position Summary</h3>
+                            <div class="info-item">
+                                <span class="label">Compensation</span>
+                                <span class="val" style="color: var(--secondary);" th:text="${job.formattedSalary}">$180,000</span>
+                            </div>
+                            <div class="info-item">
+                                <span class="label">Work Arrangement</span>
+                                <span class="val" th:text="${job.type}">Full-time</span>
+                            </div>
+                            <div class="info-item">
+                                <span class="label">Location</span>
+                                <span class="val" th:text="${job.location}">Palo Alto, CA</span>
+                            </div>
+                            <div class="info-item">
+                                <span class="label">Category</span>
+                                <span class="val" th:text="${job.category}">Engineering</span>
+                            </div>
+                            <div class="info-item">
+                                <span class="label">Hiring Manager</span>
+                                <span class="val" th:text="${job.posterName}">Sarah Chen</span>
+                            </div>
+                        </div>
+
+                        <div class="sidebar-card">
+                            <h3>About <span th:text="${job.company}">Company</span></h3>
+                            <p style="font-size: 0.92rem; color: var(--text-secondary); line-height: 1.6; margin-bottom: 16px;">
+                                A verified, high-growth organization building modern technological solutions with competitive benefits and world-class talent.
+                            </p>
+                            <a th:href="@{/jobs(search=${job.company})}" class="btn btn-outline" style="width: 100%; font-size: 0.88rem;">
+                                View other roles at <span th:text="${job.company}">Company</span>
+                            </a>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </section>
+    </main>
+
+    <!-- Interactive Apply Modal -->
+    <div id="applyModal" class="modal-overlay">
+        <div class="modal-content">
+            <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 20px;">
+                <h3 style="font-size: 1.3rem; font-weight: 800; color: var(--primary);">Apply for this Position</h3>
+                <button type="button" id="closeApplyBtn" style="font-size: 1.3rem; color: var(--text-muted); cursor: pointer;">
+                    <i class="fa-solid fa-xmark"></i>
+                </button>
+            </div>
+
+            <div style="background: var(--surface-alt); padding: 12px 16px; border-radius: var(--radius-md); margin-bottom: 20px;">
+                <div style="font-weight: 700; color: var(--primary);" th:text="${job.title}">Role</div>
+                <div style="font-size: 0.88rem; color: var(--text-secondary);" th:text="${job.company} + ' • ' + ${job.location}">Company</div>
+            </div>
+
+            <form th:action="@{/jobs/{id}/apply(id=${job.id})}" method="post">
+                <div class="form-group" th:if="${session.currentUser != null}">
+                    <label class="form-label">Applicant Name</label>
+                    <input type="text" class="form-control" th:value="${session.currentUser.name}" disabled style="background: #F1F5F9;">
+                </div>
+
+                <div class="form-group" th:if="${session.currentUser != null}">
+                    <label class="form-label">Applicant Email</label>
+                    <input type="email" class="form-control" th:value="${session.currentUser.email}" disabled style="background: #F1F5F9;">
+                </div>
+
+                <div class="form-group">
+                    <label class="form-label">Cover Note / Why You're a Great Fit</label>
+                    <textarea name="coverLetter" rows="4" class="form-control" placeholder="Introduce yourself, highlight your relevant experience, and share what excites you about this role..."></textarea>
+                </div>
+
+                <div style="display: flex; gap: 12px; margin-top: 24px;">
+                    <button type="submit" class="btn btn-primary" style="flex: 1; padding: 12px;">
+                        <i class="fa-solid fa-paper-plane"></i> Submit Application
+                    </button>
+                </div>
+            </form>
+        </div>
+    </div>
+
+    <footer th:replace="~{fragments/footer :: footer}"></footer>
+
+</body>
+</html>

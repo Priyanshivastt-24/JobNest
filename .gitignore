@@ -29,3 +29,14 @@ server/.env
 *.njsproj
 *.sln
 *.sw?
+
+# Java & Maven build artifacts
+target/
+*.class
+*.jar
+*.war
+.mvn/wrapper/maven-wrapper.jar
+.project
+.classpath
+.settings/
+*.iml

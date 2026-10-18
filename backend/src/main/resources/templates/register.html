@@ -1,0 +1,64 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<head th:replace="~{fragments/head :: head('Create Account')}"></head>
+<body>
+
+    <nav th:replace="~{fragments/navbar :: navbar}"></nav>
+
+    <main class="main-content">
+        <div class="auth-wrapper">
+            <div class="auth-card">
+                <div class="auth-header">
+                    <h2>Join JobNest</h2>
+                    <p>Create an account to discover jobs or hire top engineers</p>
+                </div>
+
+                <form th:action="@{/register}" method="post">
+                    <!-- Account Type Selector -->
+                    <label class="form-label" style="margin-bottom: 8px;">I want to</label>
+                    <div class="role-selector">
+                        <input type="radio" id="roleSeeker" name="role" value="seeker" class="role-radio" checked>
+                        <label for="roleSeeker" class="role-label">
+                            <i class="fa-solid fa-user-graduate" style="display: block; font-size: 1.2rem; margin-bottom: 4px;"></i>
+                            Find a Job
+                        </label>
+
+                        <input type="radio" id="roleEmployer" name="role" value="employer" class="role-radio">
+                        <label for="roleEmployer" class="role-label">
+                            <i class="fa-solid fa-building" style="display: block; font-size: 1.2rem; margin-bottom: 4px;"></i>
+                            Hire Talent
+                        </label>
+                    </div>
+
+                    <div class="form-group">
+                        <label class="form-label">Full Name</label>
+                        <input type="text" name="name" class="form-control" placeholder="e.g. Alex Johnson" required>
+                    </div>
+
+                    <div class="form-group">
+                        <label class="form-label">Email Address</label>
+                        <input type="email" name="email" class="form-control" placeholder="name@company.com" required>
+                    </div>
+
+                    <div class="form-group">
+                        <label class="form-label">Password</label>
+                        <input type="password" name="password" class="form-control" placeholder="Minimum 6 characters" minlength="6" required>
+                    </div>
+
+                    <button type="submit" class="btn btn-primary" style="width: 100%; padding: 12px; font-size: 1rem; margin-top: 10px;">
+                        Create Account
+                    </button>
+                </form>
+
+                <div style="text-align: center; margin-top: 24px; font-size: 0.92rem; color: var(--text-secondary);">
+                    Already have an account?
+                    <a th:href="@{/login}" style="color: var(--secondary); font-weight: 700;">Sign in</a>
+                </div>
+            </div>
+        </div>
+    </main>
+
+    <footer th:replace="~{fragments/footer :: footer}"></footer>
+
+</body>
+</html>

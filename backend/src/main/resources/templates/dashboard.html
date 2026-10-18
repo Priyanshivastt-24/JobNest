@@ -1,0 +1,267 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<head th:replace="~{fragments/head :: head('Dashboard')}"></head>
+<body>
+
+    <nav th:replace="~{fragments/navbar :: navbar}"></nav>
+
+    <main class="main-content">
+        <!-- Dashboard Header -->
+        <section class="dashboard-header">
+            <div class="container">
+                <div style="display: flex; justify-content: space-between; align-items: center; flex-wrap: wrap; gap: 20px;">
+                    <div>
+                        <div class="section-tag" th:text="${currentUser.role == 'employer' ? 'Employer Portal' : 'Candidate Portal'}">Portal</div>
+                        <h1 style="font-size: 2.2rem; font-weight: 800; color: var(--primary); letter-spacing: -0.5px;">
+                            Hello, <span th:text="${currentUser.name}">Alex</span>!
+                        </h1>
+                        <p style="color: var(--text-secondary); margin-top: 4px;">
+                            <span th:text="${currentUser.email}">alex@demo.com</span> • Role: <strong style="text-transform: capitalize;" th:text="${currentUser.role}">Seeker</strong>
+                        </p>
+                    </div>
+
+                    <div th:if="${currentUser.role == 'employer'}">
+                        <a th:href="@{/post-job}" class="btn btn-primary" style="padding: 12px 22px;">
+                            <i class="fa-solid fa-plus"></i> Post New Job
+                        </a>
+                    </div>
+                    <div th:unless="${currentUser.role == 'employer'}">
+                        <a th:href="@{/jobs}" class="btn btn-primary" style="padding: 12px 22px;">
+                            <i class="fa-solid fa-magnifying-glass"></i> Browse Open Roles
+                        </a>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <!-- ========================================== -->
+        <!-- EMPLOYER DASHBOARD VIEW                    -->
+        <!-- ========================================== -->
+        <section th:if="${currentUser.role == 'employer'}" class="section" style="padding-top: 10px;">
+            <div class="container">
+                <!-- Stats Grid -->
+                <div class="stats-grid">
+                    <div class="stat-card">
+                        <div class="stat-icon" style="background: #EEF2FF; color: #4F46E5;"><i class="fa-solid fa-briefcase"></i></div>
+                        <div>
+                            <div class="stat-val" th:text="${myJobs.size()}">0</div>
+                            <div class="stat-label">Jobs Posted</div>
+                        </div>
+                    </div>
+                    <div class="stat-card">
+                        <div class="stat-icon" style="background: #F0FDF4; color: var(--secondary);"><i class="fa-solid fa-users"></i></div>
+                        <div>
+                            <div class="stat-val" th:text="${totalApplications}">0</div>
+                            <div class="stat-label">Applications Received</div>
+                        </div>
+                    </div>
+                    <div class="stat-card">
+                        <div class="stat-icon" style="background: #FEF3C7; color: #D97706;"><i class="fa-solid fa-hourglass-half"></i></div>
+                        <div>
+                            <div class="stat-val" th:text="${pendingCount}">0</div>
+                            <div class="stat-label">Pending Reviews</div>
+                        </div>
+                    </div>
+                    <div class="stat-card">
+                        <div class="stat-icon" style="background: #ECFDF5; color: #059669;"><i class="fa-solid fa-user-check"></i></div>
+                        <div>
+                            <div class="stat-val" th:text="${acceptedCount}">0</div>
+                            <div class="stat-label">Accepted Candidates</div>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Posted Jobs Section -->
+                <div style="margin-bottom: 24px;">
+                    <h2 style="font-size: 1.45rem; font-weight: 800; color: var(--primary);">Your Job Listings & Candidates</h2>
+                </div>
+
+                <div th:if="${myJobs.isEmpty()}" style="text-align: center; padding: 60px 20px; background: var(--surface); border-radius: var(--radius-lg); border: 1px dashed var(--border);">
+                    <h3 style="font-size: 1.2rem; color: var(--text-primary); margin-bottom: 8px;">You haven't posted any jobs yet.</h3>
+                    <p style="color: var(--text-secondary); margin-bottom: 20px;">Publish your first job opening to start receiving qualified applicants.</p>
+                    <a th:href="@{/post-job}" class="btn btn-primary">Post a Job</a>
+                </div>
+
+                <div th:each="job : ${myJobs}" style="background: var(--surface); border: 1px solid var(--border); border-radius: var(--radius-lg); margin-bottom: 28px; overflow: hidden; box-shadow: var(--shadow-sm);">
+                    <!-- Job Summary Header Bar -->
+                    <div class="dashboard-job-card-header">
+                        <div>
+                            <h3 style="font-size: 1.25rem; font-weight: 800; color: var(--primary);">
+                                <a th:href="@{/jobs/{id}(id=${job.id})}" th:text="${job.title}">Senior Engineer</a>
+                            </h3>
+                            <div style="font-size: 0.88rem; color: var(--text-secondary); margin-top: 4px; display: flex; gap: 12px; align-items: center;">
+                                <span th:text="${job.company}">Company</span>
+                                <span>•</span>
+                                <span th:text="${job.location}">Location</span>
+                                <span>•</span>
+                                <span class="tag tag-type" th:text="${job.type}">Full-time</span>
+                                <span>•</span>
+                                <span style="font-weight: 600; color: var(--secondary);" th:text="${job.formattedSalary}">$180,000</span>
+                            </div>
+                        </div>
+
+                        <div style="display: flex; align-items: center; gap: 12px;">
+                            <a th:href="@{/jobs/{id}(id=${job.id})}" class="btn btn-outline" style="padding: 8px 14px; font-size: 0.85rem;">
+                                <i class="fa-solid fa-eye"></i> View Listing
+                            </a>
+                            <form th:action="@{/jobs/{id}/delete(id=${job.id})}" method="post" th:onsubmit="'return confirmDelete(\'' + ${job.title} + '\');'">
+                                <button type="submit" class="btn btn-danger" style="padding: 8px 14px; font-size: 0.85rem;">
+                                    <i class="fa-solid fa-trash"></i> Delete
+                                </button>
+                            </form>
+                        </div>
+                    </div>
+
+                    <!-- Applicants Table for this Job -->
+                    <div style="padding: 24px;">
+                        <div style="font-size: 0.95rem; font-weight: 700; color: var(--text-primary); margin-bottom: 14px; display: flex; align-items: center; gap: 8px;">
+                            <i class="fa-solid fa-users" style="color: var(--secondary);"></i>
+                            <span>Applicants (<span th:text="${jobApplicantsMap.get(job.id).size()}">0</span>)</span>
+                        </div>
+
+                        <div th:if="${jobApplicantsMap.get(job.id).isEmpty()}" style="padding: 20px; background: var(--surface-alt); border-radius: var(--radius-md); text-align: center; color: var(--text-secondary); font-size: 0.9rem;">
+                            No applications submitted yet for this role.
+                        </div>
+
+                        <div th:unless="${jobApplicantsMap.get(job.id).isEmpty()}" class="table-responsive">
+                            <table class="data-table">
+                                <thead>
+                                    <tr>
+                                        <th>Applicant</th>
+                                        <th>Cover Letter Note</th>
+                                        <th>Status</th>
+                                        <th>Update Status</th>
+                                    </tr>
+                                </thead>
+                                <tbody>
+                                    <tr th:each="app : ${jobApplicantsMap.get(job.id)}">
+                                        <td>
+                                            <div style="font-weight: 700; color: var(--text-primary);" th:text="${app.applicant != null ? app.applicant.name : 'Candidate'}">Alex</div>
+                                            <div style="font-size: 0.85rem; color: var(--text-secondary);" th:text="${app.applicant != null ? app.applicant.email : ''}">alex@demo.com</div>
+                                        </td>
+                                        <td style="max-width: 300px;">
+                                            <p style="font-size: 0.88rem; color: var(--text-secondary); margin: 0; line-height: 1.5;" th:text="${!#strings.isEmpty(app.coverLetter) ? app.coverLetter : 'No cover letter attached.'}">
+                                                Cover note snippet...
+                                            </p>
+                                        </td>
+                                        <td>
+                                            <span th:class="'status-badge status-' + ${app.status}" th:text="${app.status}">Pending</span>
+                                        </td>
+                                        <td>
+                                            <form th:action="@{/applications/{id}/status(id=${app.id})}" method="post" style="display: flex; gap: 8px; align-items: center;">
+                                                <select name="status" class="form-control" style="padding: 6px 10px; font-size: 0.82rem; width: auto;">
+                                                    <option value="pending" th:selected="${app.status == 'pending'}">Pending</option>
+                                                    <option value="reviewed" th:selected="${app.status == 'reviewed'}">Reviewed</option>
+                                                    <option value="accepted" th:selected="${app.status == 'accepted'}">Accepted</option>
+                                                    <option value="rejected" th:selected="${app.status == 'rejected'}">Rejected</option>
+                                                </select>
+                                                <button type="submit" class="btn btn-outline" style="padding: 6px 12px; font-size: 0.82rem;">Update</button>
+                                            </form>
+                                        </td>
+                                    </tr>
+                                </tbody>
+                            </table>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <!-- ========================================== -->
+        <!-- SEEKER DASHBOARD VIEW                      -->
+        <!-- ========================================== -->
+        <section th:unless="${currentUser.role == 'employer'}" class="section" style="padding-top: 10px;">
+            <div class="container">
+                <!-- Stats Grid -->
+                <div class="stats-grid">
+                    <div class="stat-card">
+                        <div class="stat-icon" style="background: #EEF2FF; color: #4F46E5;"><i class="fa-solid fa-paper-plane"></i></div>
+                        <div>
+                            <div class="stat-val" th:text="${totalApplied}">0</div>
+                            <div class="stat-label">Applications Sent</div>
+                        </div>
+                    </div>
+                    <div class="stat-card">
+                        <div class="stat-icon" style="background: #FEF3C7; color: #D97706;"><i class="fa-solid fa-clock"></i></div>
+                        <div>
+                            <div class="stat-val" th:text="${pendingCount}">0</div>
+                            <div class="stat-label">Awaiting Review</div>
+                        </div>
+                    </div>
+                    <div class="stat-card">
+                        <div class="stat-icon" style="background: #E0E7FF; color: #4338CA;"><i class="fa-solid fa-eye"></i></div>
+                        <div>
+                            <div class="stat-val" th:text="${reviewedCount}">0</div>
+                            <div class="stat-label">In Review</div>
+                        </div>
+                    </div>
+                    <div class="stat-card">
+                        <div class="stat-icon" style="background: #ECFDF5; color: #059669;"><i class="fa-solid fa-circle-check"></i></div>
+                        <div>
+                            <div class="stat-val" th:text="${acceptedCount}">0</div>
+                            <div class="stat-label">Accepted / Interviewing</div>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Applications Table -->
+                <div style="margin-bottom: 24px;">
+                    <h2 style="font-size: 1.45rem; font-weight: 800; color: var(--primary);">Your Submitted Applications</h2>
+                </div>
+
+                <div th:if="${myApplications.isEmpty()}" style="text-align: center; padding: 60px 20px; background: var(--surface); border-radius: var(--radius-lg); border: 1px dashed var(--border);">
+                    <h3 style="font-size: 1.2rem; color: var(--text-primary); margin-bottom: 8px;">No applications submitted yet.</h3>
+                    <p style="color: var(--text-secondary); margin-bottom: 20px;">Discover exciting opportunities and apply with a single click.</p>
+                    <a th:href="@{/jobs}" class="btn btn-primary">Browse Open Jobs</a>
+                </div>
+
+                <div th:unless="${myApplications.isEmpty()}" class="table-responsive">
+                    <table class="data-table">
+                        <thead>
+                            <tr>
+                                <th>Role & Company</th>
+                                <th>Location & Type</th>
+                                <th>Compensation</th>
+                                <th>Application Status</th>
+                                <th>Action</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            <tr th:each="app : ${myApplications}">
+                                <td>
+                                    <div th:if="${app.job != null}">
+                                        <div style="font-weight: 700; color: var(--primary);">
+                                            <a th:href="@{/jobs/{id}(id=${app.job.id})}" th:text="${app.job.title}">Job Title</a>
+                                        </div>
+                                        <div style="font-size: 0.88rem; color: var(--text-secondary);" th:text="${app.job.company}">Company</div>
+                                    </div>
+                                    <div th:unless="${app.job != null}" style="color: var(--text-muted); font-style: italic;">
+                                        Position no longer active
+                                    </div>
+                                </td>
+                                <td>
+                                    <span th:if="${app.job != null}" th:text="${app.job.location} + ' (' + ${app.job.type} + ')'">Location</span>
+                                </td>
+                                <td>
+                                    <span th:if="${app.job != null}" style="font-weight: 600; color: var(--secondary);" th:text="${app.job.formattedSalary}">$180,000</span>
+                                </td>
+                                <td>
+                                    <span th:class="'status-badge status-' + ${app.status}" th:text="${app.status}">Pending</span>
+                                </td>
+                                <td>
+                                    <a th:if="${app.job != null}" th:href="@{/jobs/{id}(id=${app.job.id})}" class="btn btn-outline" style="padding: 6px 12px; font-size: 0.82rem;">
+                                        View Job
+                                    </a>
+                                </td>
+                            </tr>
+                        </tbody>
+                    </table>
+                </div>
+            </div>
+        </section>
+    </main>
+
+    <footer th:replace="~{fragments/footer :: footer}"></footer>
+
+</body>
+</html>

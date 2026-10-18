@@ -1,0 +1,87 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<nav th:fragment="navbar" class="navbar">
+    <div class="nav-container">
+        <!-- Brand Logo -->
+        <a th:href="@{/}" class="nav-brand">
+            <div class="nav-logo-icon">JN</div>
+            <span>Job<span style="color: var(--secondary);">Nest</span></span>
+        </a>
+
+        <!-- Center Nav Links -->
+        <ul class="nav-links">
+            <li><a th:href="@{/}" class="nav-link">Home</a></li>
+            <li><a th:href="@{/jobs}" class="nav-link">Browse Jobs</a></li>
+            <li><a th:href="@{/#categories}" class="nav-link">Categories</a></li>
+            <li><a th:href="@{/#features}" class="nav-link">Why JobNest</a></li>
+        </ul>
+
+        <!-- Right Side Nav Actions -->
+        <div class="nav-actions">
+            <!-- If Logged In -->
+            <th:block th:if="${session.currentUser != null}">
+                <a th:if="${session.currentUser.role == 'employer'}" th:href="@{/post-job}" class="btn-nav-outline">
+                    <i class="fa-solid fa-plus"></i> Post a Job
+                </a>
+                <a th:href="@{/dashboard}" class="user-badge">
+                    <div class="user-avatar" th:text="${#strings.substring(session.currentUser.name, 0, 1)}">U</div>
+                    <span th:text="${session.currentUser.name}">User</span>
+                </a>
+                <a th:href="@{/logout}" class="btn-nav-icon" title="Sign out">
+                    <i class="fa-solid fa-arrow-right-from-bracket"></i>
+                </a>
+            </th:block>
+
+            <!-- If Not Logged In -->
+            <th:block th:unless="${session.currentUser != null}">
+                <a th:href="@{/login}" class="nav-link-signin">Sign In</a>
+                <a th:href="@{/register}" class="btn-nav-primary">Get Started</a>
+            </th:block>
+
+            <!-- Hamburger Toggle (Visible on Mobile & Tablet) -->
+            <button type="button" class="nav-toggle" id="navToggle" aria-label="Toggle navigation menu">
+                <i class="fa-solid fa-bars"></i>
+            </button>
+        </div>
+    </div>
+
+    <!-- Mobile Navigation Drawer -->
+    <div class="nav-mobile-menu" id="navMobileMenu">
+        <ul class="nav-mobile-links">
+            <li><a th:href="@{/}" class="nav-mobile-link"><i class="fa-solid fa-house"></i> Home</a></li>
+            <li><a th:href="@{/jobs}" class="nav-mobile-link"><i class="fa-solid fa-briefcase"></i> Browse Jobs</a></li>
+            <li><a th:href="@{/#categories}" class="nav-mobile-link"><i class="fa-solid fa-layer-group"></i> Categories</a></li>
+            <li><a th:href="@{/#features}" class="nav-mobile-link"><i class="fa-solid fa-star"></i> Why JobNest</a></li>
+        </ul>
+        <div class="nav-mobile-actions">
+            <th:block th:if="${session.currentUser != null}">
+                <a th:href="@{/dashboard}" class="btn-nav-primary" style="width: 100%; justify-content: center;">
+                    <i class="fa-solid fa-gauge"></i> My Dashboard
+                </a>
+                <a th:if="${session.currentUser.role == 'employer'}" th:href="@{/post-job}" class="btn-nav-outline" style="width: 100%; justify-content: center; margin-top: 8px;">
+                    <i class="fa-solid fa-plus"></i> Post a Job
+                </a>
+                <a th:href="@{/logout}" class="btn btn-danger" style="width: 100%; justify-content: center; margin-top: 8px; font-size: 0.88rem; padding: 8px;">
+                    <i class="fa-solid fa-arrow-right-from-bracket"></i> Sign Out
+                </a>
+            </th:block>
+            <th:block th:unless="${session.currentUser != null}">
+                <a th:href="@{/login}" class="btn btn-outline" style="width: 100%; justify-content: center; color: #FFFFFF; border-color: rgba(255,255,255,0.2); background: rgba(255,255,255,0.06); margin-bottom: 8px;">Sign In</a>
+                <a th:href="@{/register}" class="btn-nav-primary" style="width: 100%; justify-content: center;">Get Started</a>
+            </th:block>
+        </div>
+    </div>
+
+    <!-- Flash Message Toasts -->
+    <div class="toast-container">
+        <div th:if="${successMessage}" class="toast toast-success">
+            <i class="fa-solid fa-circle-check"></i>
+            <span th:text="${successMessage}">Operation successful!</span>
+        </div>
+        <div th:if="${errorMessage}" class="toast toast-error">
+            <i class="fa-solid fa-circle-exclamation"></i>
+            <span th:text="${errorMessage}">An error occurred.</span>
+        </div>
+    </div>
+</nav>
+</html>
